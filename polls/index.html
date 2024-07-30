@@ -1,0 +1,179 @@
+{% extends "base.html" %}
+{% block title %}管理システム{% endblock %}
+{% block content %}
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 sidebar">
+                <h5>部署選択</h5>
+                <div class="form-group">
+                    <label><input type="checkbox">異動者含む</label>
+                </div>
+                <ul class="list-group mb-4" id="departmentList">
+                    <li class="list-group-item active">一覧</li>
+                    {% csrf_token %}
+                    {% for data in department_drop %}
+                    <li class="list-group-item">{}</li>
+                    <ul>
+                    </ul>
+                    {% endfor %}
+                </ul>
+                <div class="form-group">
+                    <h5>氏名検索</h5>
+                    <input type="text" class="form-control" placeholder="ALL">
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="all" name="nameSearch" class="custom-control-input" checked>
+                        <label class="custom-control-label custom-radio" for="all">ALL</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="a" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="a">あ行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="ka" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="ka">か行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="sa" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="sa">さ行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="ta" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="ta">た行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="na" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="na">な行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="ha" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="ha">は行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="ma" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="ma">ま行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="ya" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="ya">や行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="ra" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="ra">ら行</label>
+                    </div>
+                    <div class="custom-control custom-radio">
+                        <input type="radio" id="wa" name="nameSearch" class="custom-control-input">
+                        <label class="custom-control-label custom-radio" for="wa">わ行</label>
+                    </div>
+                </div>
+                <div class="mt-4">
+                    <h5>リンク</h5>
+                    <ul class="list-group">
+                        <li class="list-group-item"><a href="#">座席表</a></li>
+                        <li class="list-group-item"><a href="#">電話表</a></li>
+                        <li class="list-group-item"><a href="#">開発統括本部 Wiki</a></li>
+                        <li class="list-group-item"><a href="#">Help</a></li>
+                    </ul>
+                </div>
+            </nav>
+
+            <main class="col-md-10 main-content">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>編集</th>
+                            <th>氏名</th>
+                            <th>出欠状況</th>
+                            <th>内容番号</th>
+                            <th>コメント</th>
+                            <th>電話対応</th>
+                            <th>不在連絡シート</th>
+                        </tr>
+                    </thead>
+                    {% if object_list %}
+                    <tbody>
+                        {% for employee in object_list %}
+                        <tr>
+                            {% csrf_token %}
+                            <td><a href="detail.html" name= {{employee.name_full}} class="btn btn-info btn-sm">編集</a></td>
+                            <td>{{employee.name_full}}<br>({{employee.name_hira}})</td>
+                            <td>{{employee.attendance}}</td>
+                            <td>{{employee.extension_num}}</td>
+                            <td>{{employee.comment}}</td>
+                            <td><button class="btn btn-primary btn-sm" data-toggle="modal" data-target="#absenceModal">不在連絡</button></td>
+                            <td><a href="absence-list.html" class="btn btn-secondary btn-sm">{{employee.absence_notification}}件</a></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                    <tr>
+                      <td>No polls are available.</td>
+                    </tr>
+                    {% endif %}
+                </table>
+            </main>
+        </div>
+    </div>
+
+    <!-- �s�ݘA�����[�_�� -->
+    <div class="modal fade" id="absenceModal" tabindex="-1" role="dialog" aria-labelledby="absenceModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="absenceModalLabel">不在連絡シート</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="date">月日</label>
+                            <input type="text" class="form-control" id="date" placeholder="自動入力" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="receiverName">受信者名</label>
+                            <input type="text" class="form-control" id="receiverName" placeholder="自動入力" disabled>
+                        </div>
+                        <div class="form-group">
+                            <label for="senderName">送信者名</label>
+                            <input type="text" class="form-control" id="senderName" placeholder="���M�Җ������">
+                        </div>
+                        <div class="form-group">
+                            <label for="message">メッセージ</label>
+                            <textarea class="form-control" id="message" rows="3" placeholder="メッセージを入力"></textarea>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="callback">
+                            <label class="form-check-label" for="callback">
+                                折り返しお電話ください
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="contactAgain">
+                            <label class="form-check-label" for="contactAgain">
+                                また連絡します。
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="notifyCall">
+                            <label class="form-check-label" for="notifyCall">
+                                電話があったことをお伝えください。
+                            </label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" value="" id="otherReason">
+                            <label class="form-check-label" for="otherReason">
+                                下記用件でした。
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label for="reason">用件</label>
+                            <textarea class="form-control" id="reason" rows="2" placeholder="用件を入力"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">送信</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

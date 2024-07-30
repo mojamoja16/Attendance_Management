@@ -1,0 +1,51 @@
+<html lang="ja">
+ <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}{% endblock %}
+    </title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .sidebar {
+            background-color: #e9ecef;
+            padding: 15px;
+        }
+        .main-content {
+            padding: 15px;
+        }
+        .highlight {
+            background-color: yellow;
+            padding: 5px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .custom-radio {
+            display: block;
+            padding-left: 1.5em;
+        }
+    </style>
+  </head>
+  <body>
+    {% block content %}{% endblock %}
+  </body>
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <script>
+      document.addEventListener('DOMContentLoaded', function() {
+          var departmentList = document.getElementById('departmentList');
+          var items = departmentList.getElementsByClassName('list-group-item');
+
+          for (var i = 0; i < items.length; i++) {
+              items[i].addEventListener('click', function() {
+                  var current = departmentList.getElementsByClassName('active');
+                  if (current.length > 0) {
+                      current[0].classList.remove('active');
+                  }
+                  this.classList.add('active');
+              });
+          }
+      });
+  </script>
+</html>

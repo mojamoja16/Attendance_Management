@@ -1,0 +1,119 @@
+{% extends "base.html" %}
+{% block title %}管理システム{% endblock %}
+{% block content %}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="calendar-container">
+                <div id='calendar'></div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="settings">
+                <h5>〇〇〇 さんの情報</h5>
+                <p id="selectedDate">2024年 4月 23日</p>
+                <form>
+                    <div class="form-group">
+                        <label>出欠状況</label>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="attend" name="status" class="custom-control-input" checked>
+                            <label class="custom-control-label" for="attend">出社</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="absence" name="status" class="custom-control-input">
+                            <label class="custom-control-label" for="absence">欠席</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="am-leave" name="status" class="custom-control-input">
+                            <label class="custom-control-label" for="am-leave">午前半休</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="pm-leave" name="status" class="custom-control-input">
+                            <label class="custom-control-label" for="pm-leave">午後半休</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="business-trip" name="status" class="custom-control-input">
+                            <label class="custom-control-label" for="business-trip">出張</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="telework" name="status" class="custom-control-input">
+                            <label class="custom-control-label" for="telework">テレワーク</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="outing" name="status" class="custom-control-input">
+                            <label class="custom-control-label" for="outing">外出[XX:XX~]</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="flex" name="status" class="custom-control-input">
+                            <label class="custom-control-label" for="flex">フレックス[XX:XX~]</label>
+                        </div>
+                        <div class="custom-control custom-radio">
+                            <input type="radio" id="other" name="status" class="custom-control-input">
+                            <label class="custom-control-label" for="other">その他</label>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="comment">コメント</label>
+                        <textarea class="form-control" id="comment" rows="3" placeholder="会議予定時間、出張予定、外出時間など"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="mainComment">コメント（メイン画面に常時反映）</label>
+                        <textarea class="form-control" id="mainComment" rows="3" placeholder="外出時の電話番号、次の出社予定日など"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>欠席情報伝達メンバー</label>
+                        <p>●● ●●　●● ●●　▲▲ ▲▲</p>
+                    </div>
+                    <div class="form-group">
+                        <button type="button" class="btn btn-secondary" data-toggle="modal" data-target="#editMembersModal">メンバー編集</button>
+                    </div>
+                    <div class="form-group d-flex justify-content-between">
+                        <button type="button" class="btn btn-danger">削除</button>
+                        <button type="button" class="btn btn-primary">登録</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- メンバー編集モーダル -->
+<div class="modal fade" id="editMembersModal" tabindex="-1" role="dialog" aria-labelledby="editMembersModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editMembersModalLabel">欠席情報伝達メンバー</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="addMember">追加するメンバー</label>
+                        <input type="text" class="form-control" id="addMember" placeholder="メンバー名">
+                        <button type="button" class="btn btn-primary mt-2">追加</button>
+                    </div>
+                    <div class="form-group">
+                        <label for="removeMember">削除するメンバー</label>
+                        <input type="text" class="form-control" id="removeMember" placeholder="メンバー名">
+                        <button type="button" class="btn btn-danger mt-2">削除</button>
+                    </div>
+                    <div class="form-group">
+                        <label>登録中のメンバー</label>
+                        <p>●● ●●　●● ●●　▲▲ ▲▲</p>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">閉じる</button>
+                <button type="button" class="btn btn-primary">決定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+{% endblock %}
